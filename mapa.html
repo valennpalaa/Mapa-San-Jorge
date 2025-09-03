@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { margin:0; font-family:sans-serif; cursor: url('cursor.png'), auto; }
+    header { padding:1rem; background:#121a33; color:#fff; }
+    form { display:flex; gap:.5rem; }
+    input[type="text"]{ flex:1; padding:.5rem; border-radius:.5rem; border:1px solid #223169; }
+    button{ padding:.5rem 1rem; border:none; border-radius:.5rem; background:#3e64ff; color:#fff; cursor:pointer; }
+    #map { height: 85vh; }
+    #status{ margin-top:.5rem; font-size:.9rem; color:#aaa; }
+  </style>
+</head>
+<body>
+  <header>
+    <form id="searchForm">
+      <input id="query" type="text" placeholder="Ingresá nombre y apellido" />
+      <button type="submit">Buscar</button>
+    </form>
+    <div id="status">Base cargada en el código ✔️</div>
+  </header>
+  <div id="map"></div>
+
+  <script>
+    // Mapa base
+    const map = L.map('map').setView([-38.4161, -63.6167], 5); // Argentina
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
+
+    // Grupo para guardar TODOS los marcadores
+    const markers = L.featureGroup().addTo(map);
+
+    // Base de datos de personas (directo en el código)
+    const PERSONAS = {
+      "Marinucci, Federica": { lat: -34.490668, lng: -58.686874, label: "Manzana 45/ Lote 5" },
+      "Vivanco, Alejandro": { lat: -34.489250, lng: -58.684589, label: "Manzana 36/ Lote 10" },
+      "Albertini": { lat: -34.486705, lng: -58.682707, label: "Manzana 15/ Lote 7" },
+      "Azzaro": { lat: -34.488049, lng: -58.679457, label: "Manzana 13/ Lote 20" },
+      "Bautista, Susana": { lat: -34.485337, lng: -58.680689, label: "Manzana 11/ Lote 1" },
+      "Belem da Silveira": { lat: -34.485532, lng: -58.685041, label: "Manzana 19/ Lote 9" },
+      "Bianchi": { lat: -34.488343, lng: -58.684711, label: "Manzana 35/ Lote 3" },
+      "Boveda": { lat: -34.489372, lng: -58.677808, label: "Manzana 13/ Lote 11" },
+      "Brocoli": { lat: -34.493159, lng: -58.685735, label: "Manzana 65/ Lote 2" },
+      "Bossi, P.": { lat: -34.484564, lng: -58.683030, label: "Manzana 8/ Lote 7" },
+      "Capelli": { lat: -34.488461, lng: -58.683892, label: "Manzana 27/ Lote 5" },
+      "Candiolo, F.": { lat: -34.487011, lng: -58.679894, label: "Manzana 12/ Lote 2" },
+      "Cicoli": { lat: -34.495184, lng: -58.686453, label: "Manzana 77/ Lote 8" },
+      "Cassel Desia": { lat: -34.493287, lng: -58.683915, label: "Manzana 66/ Lote 10B" },
+      "Carboneti": { lat: -34.484562, lng: -58.683411, label: "Manzana 14/ Lote 2" },
+      "Castro Caride": { lat: -34.487115, lng: -58.679701, label: "Manzana 12/ Lote 3" },
+      "Cohen, J.": { lat: -34.486883, lng: -58.682943, label: "Manzana 20/ Lote 6" },
+      "Chutrau V. ": { lat: -34.493139, lng: -58.687488, label: "Manzana 74/ Lote 3" },
+      "Corrales de Riadigos ": { lat: -34.487650, lng: -58.683482, label: "Manzana 20/ Lote 8" },
+      "Driollet  ": { lat: -34.489034, lng: -58.686025, label: "Manzana 44b/ Lote 2b" },
+      "Da Ponte  ": { lat: -34.487963, lng: -58.684997, label: "Manzana 35/ Lote 1" },
+      "De martini V.  ": { lat: -34.486701, lng: -58.681910, label: "Manzana 15/ Lote 3" },
+      "Dougall  ": { lat: -34.484954, lng:  -58.680597, label: "Manzana 10/ Lote 5" },
+      "Del Rincón F  ": { lat: -34.494968, lng: -58.685830, label: "Manzana 75/ Lote 9" },
+      "De santibaes J  ": { lat: -34.493374, lng: -58.685261, label: "Manzana 65/ Lote 4" },
+      "De Paul v.": { lat: -34.493594, lng: -58.687016, label: "Manzana 75/ Lote 1" },
+      "Escoda M.": { lat: -34.489410, lng: -58.685167, label: "Manzana 44b/ Lote 2c" },
+      "Fandino": { lat: -34.492560, lng: -58.687565, label: "Manzana 64/ Lote 8" },
+      "aaaa": { lat: -34.492560, lng: -58.687565, label: "Manzana 64/ Lote 8" },
+
+    };
+
+    // Función para agregar marcador
+    function agregarMarcador(nombre, datos) {
+      const popup = L.popup({ autoClose: false, closeOnClick: false })
+        .setContent(`${nombre}<br>${datos.label}`);
+
+      const marker = L.marker([datos.lat, datos.lng])
+        .addTo(markers)
+        .bindPopup(popup)
+        .openPopup(); // Este NO cerrará los anteriores gracias a autoClose: false
+
+      map.fitBounds(markers.getBounds(), { padding: [50, 50] });
+}
+
+
+    // Buscar persona en el mapa
+    document.getElementById('searchForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const q = document.getElementById('query').value.trim();
+      const resultados = Object.entries(PERSONAS).filter(([nombre]) =>
+        nombre.toLowerCase().includes(q.toLowerCase())
+      );
+     
+      if (resultados.length === 0) {
+        document.getElementById('status').textContent = "❌ Persona no encontrada";
+        return;
+      }
+     
+      // Agregamos todos los que coincidan
+      resultados.forEach(([nombre, datos]) => {
+        agregarMarcador(nombre, datos);
+      });
+      document.getElementById('status').textContent = `✅ ${resultados.length} resultado(s) encontrado(s)`;
+      document.getElementById('status').textContent = `Marcador agregado: ${q}`;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+/* Fondo y centrado */
+body {
+  margin: 0;
+  height: 100vh;                 /* ocupa toda la pantalla */
+  display: flex;                 /* activa flexbox */
+  justify-content: center;       /* centra horizontal */
+  align-items: center;           /* centra vertical */
+  background: #151f28;           /* color de fondo */
+  font-family: sans-serif;
+}
+
+/* Contenedor del botón */
+.container-eg-btn-5 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Estilo del botón */
+.container-eg-btn-5 .button {
+  background: #6f00be;
+  margin: 10px 30px;
+  padding: 18px 22px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;   /* quita subrayado del <a> */
+  transition: 0.3s;
+}
+
+.container-eg-btn-5 .button:hover {
+  background: #8a2be2;    /* efecto hover */
+}
+
+/* Centrado en pantalla */
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #151f28;
+  font-family: sans-serif;
+}
+
+/* Botón estilo */
+.button {
+  background: #af40ff;
+  margin: 10px 30px;
+  padding: 18px 22px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.3s;
+  border: none;   /* para que no se vea el borde feo del input */
+}
+
+.button:hover {
+  background: #8a2be2;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#map {
+  height: calc(100vh - 100px); /* ocupa toda la pantalla menos el header */
+  width: 100%;
+}
