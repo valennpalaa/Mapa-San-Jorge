@@ -1,77 +1,75 @@
-/* Fondo y centrado */
+/* ===== Fondo y centrado ===== */
 body {
   margin: 0;
-  height: 100vh;                 /* ocupa toda la pantalla */
-  display: flex;                 /* activa flexbox */
-  justify-content: center;       /* centra horizontal */
-  align-items: center;           /* centra vertical */
-  background: #151f28;           /* color de fondo */
+  height: 100vh;                 
+  display: flex;                 
+  flex-direction: column;        /* acomoda botones en columna en mobile */
+  justify-content: center;       
+  align-items: center;           
+  background: #151f28;           
   font-family: sans-serif;
 }
 
-/* Contenedor del botón */
+/* ===== Contenedor del botón principal ===== */
 .container-eg-btn-5 {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;  /* permite que se acomoden si no entran */
 }
 
-/* Estilo del botón */
-.container-eg-btn-5 .button {
-  background: #6f00be;
-  margin: 10px 30px;
-  padding: 18px 22px;
-  text-align: center;
-  text-transform: uppercase;
-  color: #fff;
-  font-weight: 700;
-  border-radius: 12px;
-  cursor: pointer;
-  text-decoration: none;   /* quita subrayado del <a> */
-  transition: 0.3s;
-}
-
-.container-eg-btn-5 .button:hover {
-  background: #8a2be2;    /* efecto hover */
-}
-
-/* Centrado en pantalla */
-body {
-  margin: 0;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #151f28;
-  font-family: sans-serif;
-}
-
-/* Botón estilo */
+/* ===== Estilo general de botones ===== */
 .button {
-  background: #af40ff;
-  margin: 10px 30px;
-  padding: 18px 22px;
+  background: #6f00be;
+  margin: 10px 15px;
+  padding: 16px 22px;
   text-align: center;
   text-transform: uppercase;
   color: #fff;
   font-weight: 700;
   border-radius: 12px;
   cursor: pointer;
-  text-decoration: none;
+  text-decoration: none; 
   transition: 0.3s;
-  border: none;   /* para que no se vea el borde feo del input */
+  border: none;   /* quita borde feo en <input type=button> */
 }
 
 .button:hover {
-  background: #8a2be2;
+  background: #8a2be2;   
 }
 
+/* ===== Estilo mapa ===== */
 html, body {
   height: 100%;
   margin: 0;
 }
 
 #map {
-  height: calc(100vh - 100px); /* ocupa toda la pantalla menos el header */
+  height: calc(100vh - 100px); 
   width: 100%;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .button {
+    width: 90%;          /* botones más grandes en celulares */
+    font-size: 16px;
+    padding: 14px;
+  }
+
+  .container-eg-btn-5 {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .button {
+    font-size: 14px;
+    padding: 12px;
+    margin: 8px 0;
+  }
 }
