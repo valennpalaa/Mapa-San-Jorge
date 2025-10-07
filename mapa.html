@@ -11,29 +11,32 @@
     form { display:flex; gap:.5rem; }
     input[type="text"]{ flex:1; padding:.5rem; border-radius:.5rem; border:1px solid #223169; }
     button{ padding:.5rem 1rem; border:none; border-radius:.5rem; background:#3e64ff; color:#fff; cursor:pointer; }
-    #map { height: 85vh; }
+    #map {  
+      height: calc(100vh - 100px);
+      width: 100%;
+      border-radius: 1%}
     #status{ margin-top:.5rem; font-size:.9rem; color:#aaa; }
   </style>
 </head>
 <body>
   <header>
     <form id="searchForm">
-      <input id="query" type="text" placeholder="Ingresá nombre y apellido" />
+      <input id="query" type="text" placeholder="Nombre y apellido del cliente" />
       <button type="submit">Buscar</button>
     </form>
-    <div id="status">Base cargada en el código ✔️</div>
+    <div id="status">Consulta por tu cliente ✔️</div>
   </header>
   <div id="map"></div>
 
+  <p>Flama perro, no? Dejate una propina. Dale.</p>
   <script>
-    // Mapa base
-    const map = L.map('map').setView([-38.4161, -63.6167], 5); // Argentina
+  
+    const map = L.map('map').setView([-34.519344, -58.753999], 5);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(map);
 
-    // Grupo para guardar TODOS los marcadores
+   
     const markers = L.featureGroup().addTo(map);
 
-    // Base de datos de personas (directo en el código)
     const PERSONAS = {
       "Marinucci, Federica": { lat: -34.490668, lng: -58.686874, label: "Manzana 45/ Lote 5" },
       "Vivanco, Alejandro": { lat: -34.489250, lng: -58.684589, label: "Manzana 36/ Lote 10" },
@@ -41,11 +44,14 @@
       "Azzaro": { lat: -34.488049, lng: -58.679457, label: "Manzana 13/ Lote 20" },
       "Bautista, Susana": { lat: -34.485337, lng: -58.680689, label: "Manzana 11/ Lote 1" },
       "Belem da Silveira": { lat: -34.485532, lng: -58.685041, label: "Manzana 19/ Lote 9" },
+      "Benedetto de Pichon": { lat: -34.486586, lng: -58.684284, label: "Manzana 20/ Lote 13" },
       "Bianchi": { lat: -34.488343, lng: -58.684711, label: "Manzana 35/ Lote 3" },
+      "Blousson": { lat: -34.492462, lng: -58.683227, label: "Manzana 49/ Lote 5" },
       "Boveda": { lat: -34.489372, lng: -58.677808, label: "Manzana 13/ Lote 11" },
       "Brocoli": { lat: -34.493159, lng: -58.685735, label: "Manzana 65/ Lote 2" },
       "Bossi, P.": { lat: -34.484564, lng: -58.683030, label: "Manzana 8/ Lote 7" },
       "Capelli": { lat: -34.488461, lng: -58.683892, label: "Manzana 27/ Lote 5" },
+      "Calcaterra": { lat: -34.487499, lng: -58.679075, label: "Manzana 13/ Lote 2" },
       "Candiolo, F.": { lat: -34.487011, lng: -58.679894, label: "Manzana 12/ Lote 2" },
       "Cicoli": { lat: -34.495184, lng: -58.686453, label: "Manzana 77/ Lote 8" },
       "Cassel Desia": { lat: -34.493287, lng: -58.683915, label: "Manzana 66/ Lote 10B" },
@@ -63,11 +69,78 @@
       "De Paul v.": { lat: -34.493594, lng: -58.687016, label: "Manzana 75/ Lote 1" },
       "Escoda M.": { lat: -34.489410, lng: -58.685167, label: "Manzana 44b/ Lote 2c" },
       "Fandino": { lat: -34.492560, lng: -58.687565, label: "Manzana 64/ Lote 8" },
-      "aaaa": { lat: -34.492560, lng: -58.687565, label: "Manzana 64/ Lote 8" },
+      "Guillamet": { lat: -34.492560, lng: -58.687565, label: "Manzana 65/ Lote 3" },
+      "Gardini": { lat: -34.489879, lng: -58.679784, label: "Manzana 23A/ Lote 2B" },
+      "Gomes L.": { lat: -34.488058, lng: -58.681260, label: "Manzana 16/ Lote 7" },
+      "Gomez C.": { lat: -34.485298, lng: -58.681153, label: "Manzana 10/ Lote 6" },
+      "Haxell C.": { lat: -34.487053, lng: -58.681302, label: "Manzana 16/ Lote 2" },
+      "Iaccarino": { lat: -34.485637, lng: -58.683470, label: "Manzana 13/ Lote 22" },
+      "Jaite Sol": { lat: -34.490506, lng: -58.686133, label: "Manzana 46/ Lote 6" },
+      "Lanza P.": { lat: -34.494126, lng: -58.688873, label: "Manzana 76/ Lote 5" },
+      "Lee": { lat: -34.489868, lng: -58.681853, label: "Manzana 37/ Lote 8" },
+      "Lizarralde": { lat: -34.485670, lng: -58.683524, label: "Manzana 14/ Lote 7" },
+      "Ligia Stella": { lat: -34.484453, lng: -58.682112, label: "Manzana 10/ Lote 15" },
+      "Lozano Casas C.": { lat: -34.485709, lng: -58.684882, label: "Manzana 19/ Lote 8" },
+      "Llerena pasos": { lat: -34.488445, lng: -58.685676, label: "Manzana 35/ Lote 7" },
+      "Luque": { lat: -34.489297, lng: -58.684892, label: "Manzana 36/ Lote 9" },//hasta aca pichi
+      "López bravo S.": { lat: -34.488920, lng: -58.684867, label: "Manzana 35/ Lote 5" },
+      "Martillo irupe": { lat: -34.483821, lng: -58.681664, label: "Manzana 8/ Lote 4b" },
+      "Marsilli": { lat: -34.488299, lng: -58.680709, label: "Manzana 17/ Lote 19" },
+      "Mastellone": { lat: -34.493289, lng: -58.687295, label: "Manzana 74/ Lote 4" },
+      "Machado Marcondes": { lat: -34.492087, lng: -58.686773, label: "Manzana 64/ Lote 1" },
+      "Mazzotta": { lat: -34.488713, lng: -58.678150, label: "Manzana 13/ Lote 8" },
+      "Melian v.": { lat: -34.490470, lng: -58.685393, label: "Manzana 44b/ Lote 6" },
+      "Medina": { lat: -34.487587, lng: -58.681975, label: "Manzana 16/ Lote 10" },
+      "Mich Salgado Mc.": { lat: -34.488449, lng: -58.679522, label: "Manzana 17/ Lote 3" },
+      "Muñoz Leticia": { lat: -34.494070, lng: -58.684376, label: "Manzana 65/ Lote 7" },
+      "Marinucci Cristina": { lat: -34.492397, lng: -58.682177, label: "Manzana 49/ Lote 2" },
+      "Marinucci F.": { lat: -34.490652, lng: -58.686961, label: "Manzana 45/ Lote 5" },
+      "Messuti Dorian": { lat: -34.488624, lng: -58.679302, label: "Manzana 17/ Lote 4" },
+      "Muñoz Toro": { lat: -34.486259, lng: -58.679992, label: "Manzana 11/ Lote 5" },
+      "Muns M": { lat: -34.492834, lng: -58.687418, label: "Manzana 64/ Lote 7" },
+      "Muther C": { lat: -34.485935, lng: -58.683327, label: "Manzana 15/ Lote 11" },
+      "Muther A": { lat: -34.488558, lng: -58.684103, label: "Manzana 27/ Lote 6" },
+      "Milito Paula": { lat: -34.488105, lng: -58.681970, label: "Manzana 21/ Lote 4" },
+      "Moretti": { lat: -34.485924, lng: -58.684792, label: "Manzana 19/ Lote 7" },
+      "Mosquera": { lat: -34.489878, lng: -58.683907, label: "Manzana 36/ Lote 7" },
+      "Nano Lembo": { lat: -34.490542, lng: -58.680434, label: "Manzana 23B/ Lote 7" },
+      "Orrantia M": { lat: -34.494333, lng: -58.689210, label: "Manzana 82C/ Lote 4" },
+      "Olivera": { lat: -34.489617, lng: -58.678395, label: "Manzana 13/ Lote 12" },
+      "Orangue": { lat: -34.483599, lng: -58.681203, label: "Manzana 8/ Lote 3A" },
+      "Orezzoli": { lat: -34.489147, lng: -58.681208, label: "Manzana 22/ Lote 7" },
+      "Pallache J.": { lat: -34.489000, lng: -58.686141, label: "Manzana 44A/ Lote 1c" },
+      "Peralta M": { lat: -34.495319, lng: -58.687852, label: "Manzana 82D/ Lote 6" },
+      "Petroselli A.": { lat: -34.485557, lng: -58.682261, label: "Manzana 10/ Lote 10" },
+      "Roffo M": { lat: -34.489725, lng: -58.679504, label: "Manzana 17/ Lote 13" },
+      "Rabinovich": { lat: -34.487046, lng: -58.682410, label: "Manzana 15/ Lote 5" },
+      "Rosenblat": { lat: -34.491712, lng: -58.683743, label: "Manzana 49/ Lote 9f" },
+      "Rodríguez N": { lat: -34.485396, lng: -58.681390, label: "Manzana 10/ Lote 7" },
+      "Saponara": { lat: -34.493380, lng: -58.685074, label: "Manzana 65/ Lote 5a" },
+      "Sarsotti R": { lat: -34.494781, lng: -58.688135, label: "Manzana 77/ Lote 13" },
+      "Sarubi": { lat: -34.492956, lng: -58.682478, label: "Manzana 66/ Lote 3" },
+      "Salem de sirio": { lat: -34.494894, lng: -58.686225, label: "Manzana 75/ Lote 10" },
+      "Serenelli": { lat: -34.490925, lng: -58.679633, label: "Manzana 20/ Lote 12b" },
+      "Serrano": { lat: -34.490925, lng: -58.679633, label: "Manzana 23b/ Lote 4" },
+      "Soriano": { lat: -34.487911, lng: -58.679633, label: "Manzana 13/ Lote 21" },
+      "Skalic": { lat: -34.486041, lng: -58.679518, label: "Manzana 9/ Lote 9" },
+      "Stuart Milne": { lat: -34.484174, lng: -58.681697, label: "Manzana 10/ Lote 17" },
+      "Taylor": { lat: -34.490538, lng: -58.679636, label: "Manzana 23B/ Lote 2" },
+      "Testoni M.": { lat: -34.488615, lng: -58.682610, label: "Manzana 21/ Lote 6" },
+      "Trappa Alej.": { lat: -34.487917, lng: -58.681517, label: "Manzana 16/ Lote 8" },
+      "Trappa Fer.": { lat: -34.487885, lng: -58.678700, label: "Manzana 13/ Lote 4" },
+      "Taboada": { lat: -34.489666, lng: -58.682255, label: "Manzana 37/ Lote 9" },
+      "Urruti Carballo": { lat: -34.489028, lng: -58.686015, label: "Manzana 44B/ Lote 2H" },
+      "von Gersterber": { lat: -34.493017, lng: -58.684474, label: "Manzana 48/ Lote 2" },
+      "Viola": { lat: -34.483374, lng: -58.680786, label: "Manzana 8/ Lote 1A" },
+      "Viola Sabrina": { lat: -34.493142, lng: -58.685734, label: "Manzana 65/ Lote 2" },
+      "Velandia Galindo": { lat: -34.493858, lng: -58.686581, label: "Manzana 75/ Lote 3" },
+      "Vergara del carril i.": { lat: -34.486906, lng: -58.682965, label: "Manzana 20/ Lote 5" },
+      "Villalba V.": { lat: -34.492727, lng: -58.684542, label: "Manzana 48/ Lote 1" },
+      "Yañez P": { lat: -34.492594, lng: -58.686443, label: "Manzana 64/ Lote 3" },
+      "Zegarra": { lat: -34.488632, lng: -58.684503, label: "Manzana 35/ Lote 4" },
 
     };
 
-    // Función para agregar marcador
     function agregarMarcador(nombre, datos) {
       const popup = L.popup({ autoClose: false, closeOnClick: false })
         .setContent(`${nombre}<br>${datos.label}`);
@@ -75,13 +148,13 @@
       const marker = L.marker([datos.lat, datos.lng])
         .addTo(markers)
         .bindPopup(popup)
-        .openPopup(); // Este NO cerrará los anteriores gracias a autoClose: false
+        .openPopup();
 
       map.fitBounds(markers.getBounds(), { padding: [50, 50] });
 }
 
 
-    // Buscar persona en el mapa
+
     document.getElementById('searchForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const q = document.getElementById('query').value.trim();
@@ -90,16 +163,15 @@
       );
      
       if (resultados.length === 0) {
-        document.getElementById('status').textContent = "❌ Persona no encontrada";
+        document.getElementById('status').textContent = "❌ Cliente no encontrado.";
         return;
       }
      
-      // Agregamos todos los que coincidan
       resultados.forEach(([nombre, datos]) => {
         agregarMarcador(nombre, datos);
       });
       document.getElementById('status').textContent = `✅ ${resultados.length} resultado(s) encontrado(s)`;
-      document.getElementById('status').textContent = `Marcador agregado: ${q}`;
+      document.getElementById('status').textContent = `Cliente agregado: ${q}`;
     });
   </script>
 </body>

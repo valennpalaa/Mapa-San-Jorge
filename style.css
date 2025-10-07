@@ -22,7 +22,7 @@ body {
 .button {
   background: #6f00be;
   margin: 10px 15px;
-  padding: 16px 22px;
+  padding: 16px 50px;
   text-align: center;
   text-transform: uppercase;
   color: #fff;
@@ -47,6 +47,7 @@ html, body {
 #map {
   height: calc(100vh - 100px); 
   width: 100%;
+  border-radius: 1%;
 }
 
 /* ===== Responsive ===== */
@@ -72,4 +73,8 @@ html, body {
     padding: 12px;
     margin: 8px 0;
   }
+}
+
+p{
+    color: aliceblue;
 }
